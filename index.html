@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.O.S Casa</title>
+
+<style>
+body{
+font-family: Arial, Helvetica, sans-serif;
+background:#f0f2f5;
+margin:0;
+padding:0;
+}
+
+.app-container{
+max-width:600px;
+margin:0 auto;
+padding:20px;
+}
+
+.fb-wrapper{
+background:#fff;
+padding:15px;
+border-radius:8px;
+box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.fb-comment{
+display:flex;
+margin-bottom:15px;
+}
+
+.fb-avatar{
+width:40px;
+height:40px;
+border-radius:50%;
+margin-right:10px;
+}
+
+.fb-bubble{
+background:#f0f2f5;
+padding:10px;
+border-radius:15px;
+}
+
+.fb-name{
+font-weight:bold;
+font-size:14px;
+}
+
+.fb-text{
+font-size:14px;
+margin-top:4px;
+}
+
+.fb-meta{
+font-size:12px;
+color:#65676b;
+margin-top:5px;
+}
+
+.fb-like-count{
+font-size:12px;
+color:#65676b;
+margin-top:3px;
+}
+
+.fb-replies{
+margin-left:50px;
+margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app-container">
+<h2>Comentários</h2>
+
+<div class="fb-wrapper" id="fbComments"></div>
+
+</div>
+
+<script>
+
+var commentsData = [
+
+{
+name:"S.O.S Casa Oficial",
+avatar:"https://randomuser.me/api/portraits/women/90.jpg",
+text:"O acesso está liberado pelo valor promocional por tempo limitado.",
+time:"Agora mesmo",
+likes:312,
+verified:true,
+replies:[]
+},
+
+{
+name:"Ana Clara Martins",
+avatar:"https://randomuser.me/api/portraits/women/12.jpg",
+text:"Resolvi o problema do colchão muito rápido.",
+time:"2 min",
+likes:94,
+replies:[
+{
+name:"Juliana Ferreira",
+avatar:"https://randomuser.me/api/portraits/women/44.jpg",
+text:"Funciona mesmo?",
+time:"1 min",
+likes:15
+}
+]
+}
+
+];
+
+function renderComment(c){
+
+var repliesHtml = "";
+
+if(c.replies && c.replies.length > 0){
+repliesHtml = '<div class="fb-replies">';
+c.replies.forEach(function(r){
+
+repliesHtml +=
+'<div class="fb-comment">'+
+'<img class="fb-avatar" src="'+r.avatar+'">'+
+'<div>'+
+'<div class="fb-bubble">'+
+'<div class="fb-name">'+r.name+'</div>'+
+'<div class="fb-text">'+r.text+'</div>'+
+'</div>'+
+'<div class="fb-meta">'+r.time+' · Curtidas '+r.likes+'</div>'+
+'</div>'+
+'</div>';
+
+});
+repliesHtml += '</div>';
+}
+
+return '<div class="fb-comment">'+
+'<img class="fb-avatar" src="'+c.avatar+'">'+
+'<div>'+
+'<div class="fb-bubble">'+
+'<div class="fb-name">'+c.name+'</div>'+
+'<div class="fb-text">'+c.text+'</div>'+
+'</div>'+
+'<div class="fb-meta">'+c.time+' · Curtidas '+c.likes+'</div>'+
+repliesHtml+
+'</div>'+
+'</div>';
+}
+
+var container=document.getElementById("fbComments");
+
+commentsData.forEach(function(c){
+container.innerHTML += renderComment(c);
+});
+
+</script>
+
+</body>
+</html>
