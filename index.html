@@ -1,3 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>S.O.S Casa</title>
+
+<style>
+
+body{
+font-family:Helvetica,Arial,sans-serif;
+background:#f0f2f5;
+margin:0;
+padding:0;
+}
+
+.app-container{
+max-width:600px;
+margin:auto;
+background:white;
+min-height:100vh;
+}
+
+.app-header{
+background:#2E77D0; /* Azul da imagem */
+color:white;
+padding:16px;
+font-size:20px;
+font-weight:bold;
+text-align:center;
+border-bottom-left-radius:20px;
+border-bottom-right-radius:20px;
+}
+
+.app-sub{
+padding:16px;
+text-align:center;
+font-size:15px;
+color:#333;
+line-height:1.5;
+}
+
+.app-highlight{
+color:#2E77D0;
+font-weight:bold;
+}
+
+.fb-wrapper{
+padding:12px;
+}
+
+.fb-header{
+display:flex;
+justify-content:space-between;
+font-size:14px;
+color:#65676b;
+margin-bottom:10px;
+}
+
+.fb-title{
+font-weight:600;
+color:#050505;
+}
+
+.fb-comment{
+display:flex;
+margin-bottom:14px;
+opacity:0;
+transform:translateY(10px);
+transition:.4s;
+}
+
+.fb-comment.show{
+opacity:1;
+transform:translateY(0);
+}
+
+.fb-avatar{
+width:36px;
+height:36px;
+border-radius:50%;
+margin-right:8px;
+}
+
+.fb-body{
+flex:1;
+}
+
+.fb-bubble{
+background:#f0f2f5;
+padding:10px 14px;
+border-radius:18px;
+}
+
+.fb-name{
+font-weight:600;
+font-size:13px;
+margin-bottom:3px;
+}
+
+.fb-text{
+font-size:14px;
+line-height:1.4;
+}
+
+.fb-meta{
+font-size:12px;
+color:#65676b;
+margin-top:4px;
+}
+
+.fb-meta span{
+margin-right:12px;
+cursor:pointer;
+}
+
+.fb-meta span:hover{
+text-decoration:underline;
+}
+
+.fb-like-count{
+font-size:12px;
+color:#65676b;
+margin-top:2px;
+}
+
+.fb-load{
+cursor:pointer;
+color:#65676b;
+font-size:14px;
+margin-top:10px;
+}
+
+.fb-load:hover{
+text-decoration:underline;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="app-container">
+
+<div class="app-header">
+S.O.S Casa
+</div>
+
+<div class="app-sub">
+Acesso completo ao <span class="app-highlight">guia prático com soluções domésticas rápidas e eficientes</span><br>
+Organizado passo a passo para facilitar sua rotina.
+</div>
+
+<div class="fb-wrapper">
+
+<div class="fb-header">
+<div class="fb-title">Comentários</div>
+<div>Mais relevantes ▼</div>
+</div>
+
+<div id="fbComments"></div>
+
+<div class="fb-load" onclick="loadMore()">Ver mais comentários</div>
+
+</div>
+
+</div>
+
+<script>
+
+var commentsData = [
+
+{
+name:"Ana Clara Martins",
+avatar:"https://randomuser.me/api/portraits/women/12.jpg",
+text:"Eu achei que seria apenas mais um material simples, mas me surpreendi. Usei a solução para tirar cheiro do colchão e funcionou de verdade. Segui exatamente o passo a passo e em poucos minutos já senti diferença. Gostei porque é prático e direto, sem enrolação.",
+time:"Agora mesmo",
+likes:62
+},
+
+{
+name:"Juliana Ferreira",
+avatar:"https://randomuser.me/api/portraits/women/44.jpg",
+text:"O que eu mais gostei foi a organização. Não é aquela coisa bagunçada que você precisa ficar pesquisando. Está tudo separado por problema, com explicação clara. Já apliquei dicas na cozinha e na lavanderia e resolveram situações que estavam me incomodando há semanas.",
+time:"4 min",
+likes:41
+},
+
+{
+name:"Mariana Souza",
+avatar:"https://randomuser.me/api/portraits/women/32.jpg",
+text:"Tenho dois filhos pequenos e a rotina aqui é corrida. Várias soluções me ajudaram a economizar tempo e evitar gastos desnecessários com produtos caros. É simples, mas funciona.",
+time:"7 min",
+likes:29
+},
+
+{
+name:"Patricia Oliveira",
+avatar:"https://randomuser.me/api/portraits/women/55.jpg",
+text:"Achei muito completo. Tem solução para mofo, gordura pesada, cheiro desagradável, organização e várias outras coisas do dia a dia. Já indiquei para minha irmã porque realmente vale a pena ter tudo organizado em um só lugar.",
+time:"12 min",
+likes:74
+},
+
+{
+name:"Camila Rodrigues",
+avatar:"https://randomuser.me/api/portraits/women/18.jpg",
+text:"Resolvi um problema antigo de gordura acumulada no fogão usando uma das orientações. Fiquei surpresa porque usei apenas itens que já tinha em casa.",
+time:"16 min",
+likes:33
+},
+
+{
+name:"Fernanda Alves",
+avatar:"https://randomuser.me/api/portraits/women/29.jpg",
+text:"Gostei porque não complica. É simples, direto e aplicável na vida real.",
+time:"19 min",
+likes:22
+},
+
+{
+name:"Roberta Costa",
+avatar:"https://randomuser.me/api/portraits/women/65.jpg",
+text:"Minha rotina ficou muito mais organizada depois que comecei a aplicar as orientações. Pequenas mudanças que fizeram bastante diferença no dia a dia.",
+time:"25 min",
+likes:58
+}
+
+];
+
+var visible = 0;
+
+function renderComment(c){
+
+return '<div class="fb-comment show">'+
+'<img class="fb-avatar" src="'+c.avatar+'">'+
+'<div class="fb-body">'+
+'<div class="fb-bubble">'+
+'<div class="fb-name">'+c.name+'</div>'+
+'<div class="fb-text">'+c.text+'</div>'+
+'</div>'+
+'<div class="fb-meta">'+
+'<span>Curtir</span>'+
+'<span>Responder</span>'+
+'<span>'+c.time+'</span>'+
+'</div>'+
+'<div class="fb-like-count">👍 ❤️ '+c.likes+'</div>'+
+'</div>'+
+'</div>';
+
+}
+
+function loadMore(){
+
+var container=document.getElementById("fbComments");
+
+for(var i=0;i<5;i++){
+
+if(visible>=commentsData.length) return;
+
+container.innerHTML += renderComment(commentsData[visible]);
+
+visible++;
+
+}
+
+}
+
+function init(){
+
+visible=0;
+
+document.getElementById("fbComments").innerHTML="";
+
+loadMore();
+
+}
+
+window.onload=init;
+
+setTimeout(init,300);
+
+setTimeout(init,800);
+
+</script>
+
+</body>
+</html>
+
 {
 name:"Mariana Souza",
 avatar:"https://randomuser.me/api/portraits/women/55.jpg",
